@@ -15,24 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="combo.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="range.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="style.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="parseRange.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="combo.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="parseRange.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="range.h">
@@ -41,8 +27,22 @@
     <ClInclude Include="style.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="parseRange.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="combo.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parseRange.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="range.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="style.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

@@ -20,10 +20,9 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{ACA55B50-D819-49E0-9F00-B114EC16D4EC}</ProjectGuid>
+    <ProjectGuid>{222091D8-3FF2-497A-AAEC-0F3B9B63B5B6}</ProjectGuid>
     <RootNamespace>texanal</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
-    <ProjectName>texanal</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -116,17 +115,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="parseRange.c" />
-    <ClCompile Include="style.c" />
-    <ClCompile Include="combo.c" />
-    <ClCompile Include="main.c" />
-    <ClCompile Include="range.c" />
+    <ClInclude Include="combo.h" />
+    <ClInclude Include="parseRange.h" />
+    <ClInclude Include="range.h" />
+    <ClInclude Include="style.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="parseRange.h" />
-    <ClInclude Include="style.h" />
-    <ClInclude Include="combo.h" />
-    <ClInclude Include="range.h" />
+    <ClCompile Include="combo.c" />
+    <ClCompile Include="main.c" />
+    <ClCompile Include="parseRange.c" />
+    <ClCompile Include="range.c" />
+    <ClCompile Include="style.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
