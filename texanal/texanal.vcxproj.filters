@@ -27,6 +27,18 @@
     <ClInclude Include="style.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="parseFlop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="flop.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="hand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="texture.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="combo.c">
@@ -42,6 +54,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="style.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="hand.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="parseFlop.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="flop.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="texture.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

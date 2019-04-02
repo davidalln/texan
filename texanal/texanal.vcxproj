@@ -116,16 +116,24 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="combo.h" />
+    <ClInclude Include="flop.h" />
+    <ClInclude Include="hand.h" />
+    <ClInclude Include="parseFlop.h" />
     <ClInclude Include="parseRange.h" />
     <ClInclude Include="range.h" />
     <ClInclude Include="style.h" />
+    <ClInclude Include="texture.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="combo.c" />
+    <ClCompile Include="flop.c" />
+    <ClCompile Include="hand.c" />
     <ClCompile Include="main.c" />
+    <ClCompile Include="parseFlop.c" />
     <ClCompile Include="parseRange.c" />
     <ClCompile Include="range.c" />
     <ClCompile Include="style.c" />
+    <ClCompile Include="texture.c" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -22,13 +22,12 @@ rank_t c_rank1(combo_t combo) {
 	return (rank_t)((combo.definition >> 8) & 0b1111);
 }
 
-unsigned int c_nHandsActive(combo_t combo) {
-	data nHandsActive = combo.definition >> 4;
-	return combo.definition & 0b1111;
+unsigned char c_nHandsActive(combo_t combo) {
+	return (unsigned char)((combo.definition >> 3) & 0b11111);
 }
 
 comboType_t c_type(combo_t combo) {
-	return (comboType_t)(combo.definition & 0b1111);
+	return (comboType_t)(combo.definition & 0b111);
 }
 
 combo_t c_setRanks(combo_t combo, rank_t rank0, rank_t rank1) {
@@ -92,11 +91,11 @@ combo_t c_newBlankCombo() {
 	rank_t rank0 = NO_RANK;
 	rank_t rank1 = NO_RANK;
 	comboType_t type = NO_TYPE;
-	unsigned nHandsActive = 0;
+	unsigned char nHandsActive = 0;
 	data handsActive = 0;
 
 	combo.definition = 0;
-	combo.definition = (rank0 << 12) | (rank1 << 8) | (nHandsActive << 4) | type;
+	combo.definition = ((rank0 << 12) & 0b1111000000000000) | ((rank1 << 8) & 0b0000111100000000) | ((nHandsActive << 3) & 0b0000000011111000) | (type & 0b1111);
 	combo.handsActive = handsActive;
 
 	return combo;
@@ -106,7 +105,7 @@ combo_t c_newCombo(rank_t rank0, rank_t rank1)
 {
 	combo_t combo;
 
-	unsigned nHandsActive;
+	unsigned char nHandsActive;
 	comboType_t type;
 	data handsActive;
 
@@ -117,7 +116,7 @@ combo_t c_newCombo(rank_t rank0, rank_t rank1)
 	}
 	else if (rank0 < rank1) {
 		type = SUITED;
-		nHandsActive = 12;
+		nHandsActive = 4;
 		handsActive = SUITED_ALL_HANDS_ACTIVE;
 	}
 	else {
@@ -131,7 +130,16 @@ combo_t c_newCombo(rank_t rank0, rank_t rank1)
 	}
 
 	combo.definition = 0;
-	combo.definition = (rank0 << 12) | (rank1 << 8) | (nHandsActive << 4) | type;
+	combo.definition = ((rank0 << 12) & 0b1111000000000000) | ((rank1 << 8) & 0b0000111100000000) | ((nHandsActive << 3) & 0b0000000011111000) | (type & 0b111);
+	combo.handsActive = handsActive;
+
+	return combo;
+}
+
+combo_t c_constructCombo(rank_t rank0, rank_t rank1, unsigned char nHandsActive, comboType_t type, data handsActive) {
+	combo_t combo = c_newBlankCombo();
+	combo.definition = 0;
+	combo.definition = ((rank0 << 12) & 0b1111000000000000) | ((rank1 << 8) & 0b0000111100000000) | ((nHandsActive << 3) & 0b0000000011111000) | (type & 0b111);
 	combo.handsActive = handsActive;
 
 	return combo;
@@ -142,15 +150,9 @@ combo_t c_mergeCombo(combo_t combo0, combo_t combo1)
 	rank_t rank0 = c_rank0(combo0);
 	rank_t rank1 = c_rank1(combo0);
 	comboType_t type = MIXED;
-	unsigned nHandsActive = c_nHandsActive(combo0) + c_nHandsActive(combo1);
+	unsigned char nHandsActive = c_nHandsActive(combo0) + c_nHandsActive(combo1);
 
-
-	combo_t combo;
-	combo.definition = 0;
-	combo.definition = (rank0 << 12) | (rank1 << 8) | (nHandsActive << 4) | type;
-	combo.handsActive = combo0.handsActive | combo1.handsActive;
-
-	return combo;
+	return c_constructCombo(rank0, rank1, nHandsActive, type, combo0.handsActive | combo1.handsActive);
 }
 
 data c_handsOfType(combo_t combo, comboType_t type)
@@ -165,4 +167,40 @@ data c_handsOfType(combo_t combo, comboType_t type)
 	default:
 		return combo.handsActive;
 	}
+}
+
+combo_t c_applyDeadCards(combo_t combo0, card_t card0, card_t card1, card_t card2, card_t card3, card_t card4)
+{
+	int nHandsActive = c_nHandsActive(combo0);
+	data handsActive = combo0.handsActive;
+
+	rank_t rank0 = c_rank0(combo0);
+	rank_t rank1 = c_rank1(combo0);
+	comboType_t type = c_type(combo0);
+
+
+	for (int i = 0; i < HANDS_PER_COMBO; i++) {
+		suit_t suit0 = i % 4;
+		suit_t suit1 = i / 4;
+
+		if (handsActive & (1 << (HANDS_PER_COMBO - i - 1))) {
+			hand_t hand = h_newHand(rank0, suit0, rank1, suit1);
+			if (
+				(h_cardRank(card0) != NO_RANK && h_hasCard(hand, card0))
+				|| (h_cardRank(card1) != NO_RANK && h_hasCard(hand, card1))
+				|| (h_cardRank(card2) != NO_RANK && h_hasCard(hand, card2))
+				|| (h_cardRank(card3) != NO_RANK && h_hasCard(hand, card3))
+				|| (h_cardRank(card4) != NO_RANK && h_hasCard(hand, card4))
+				) {
+				printf("found hand ");
+				h_printString(hand);
+				handsActive = handsActive & ~(1 << (HANDS_PER_COMBO - i - 1));
+				nHandsActive = nHandsActive - 1;
+				printf(" handsActive: %d nHandsActive: %d", handsActive, nHandsActive);
+				printf("\n");
+			}
+		}
+	}
+
+	return c_constructCombo(rank0, rank1, nHandsActive & 0b1111, type, handsActive);
 }
