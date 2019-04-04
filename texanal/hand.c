@@ -53,9 +53,17 @@ suit_t h_suit1(hand_t hand)
 unsigned h_hasCard(hand_t hand, card_t card)
 {
 	return (
-			(h_rank0(hand) == h_cardRank(card) && h_suit0(hand) == h_cardSuit(card))
-		||	(h_rank1(hand) == h_cardRank(card) && h_suit1(hand) == h_cardSuit(card))
-	);
+		(h_rank0(hand) == h_cardRank(card) && h_suit0(hand) == h_cardSuit(card))
+		|| (h_rank1(hand) == h_cardRank(card) && h_suit1(hand) == h_cardSuit(card))
+		);
+}
+
+unsigned h_hasCardRank(hand_t hand, card_t card)
+{
+	return (
+		(h_rank0(hand) == h_cardRank(card))
+		|| (h_rank1(hand) == h_cardRank(card))
+		);
 }
 
 void h_cardPrintString(card_t card) {

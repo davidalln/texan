@@ -2,6 +2,7 @@
 
 #include <windows.h>
 #include "range.h"
+#include "texture.h"
 #include "parseRange.h"
 #include "parseFlop.h"
 #include "style.h"
@@ -67,6 +68,14 @@ int main(int argc, char *argv[]) {
 	range = r_applyDeadCards(range, flop.card0, flop.card1, flop.card2, h_newBlankCard(), h_newBlankCard());
 	r_printCombos(range);
 	r_printRange(range);
+
+	texture_t texture = t_newBlankTexture();
+	texture.cards[0] = flop.card0;
+	texture.cards[1] = flop.card1;
+	texture.cards[2] = flop.card2;
+	texture.length = 3;
+
+	t_applyTextureToRange(texture, range);
 
 	u_resetStyle();
 	//getchar();

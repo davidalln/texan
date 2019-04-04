@@ -29,6 +29,7 @@ suit_t h_suit0(hand_t hand);
 suit_t h_suit1(hand_t hand);
 
 unsigned h_hasCard(hand_t hand, card_t card);
+unsigned h_hasCardRank(hand_t hand, card_t card);
 
 void h_cardPrintString(card_t card);
 void h_printString(hand_t hand);
