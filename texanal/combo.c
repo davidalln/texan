@@ -66,11 +66,45 @@ combo_t c_newCombo(rank_t rank0, rank_t rank1) {
 }
 
 void c_deleteCombo(combo_t combo) {
+	char combostr[10];
+	c_toString(combo, combostr);
 	ll_deleteList(combo.hands);
 }
 
 unsigned c_isNull(combo_t combo) {
 	return (combo.type == NULL_COMBO && ll_isNull(combo.hands));
+}
+
+combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
+	for (int i = 0; i < nCards; i++) {
+		card_t card = cards[i];
+		
+		if (combo.ranks[0] == card.rank || combo.ranks[1] == card.rank) {
+			for (int j = 0; j < 8; j++) {
+				if (!ll_isNull(combo.hands)) {
+					hand_t searchHand;
+					if (j < 4) {
+						searchHand = h_newHand(card, d_newCard(combo.ranks[1], j));
+					} else {
+						searchHand = h_newHand(d_newCard(combo.ranks[0], j - 4), card);
+					}
+
+					combo.hands = ll_search(combo.hands, h_encode(searchHand));
+					
+					hand_t foundHand;
+					ll_get(combo.hands, &foundHand);
+
+					if (h_compare(searchHand, foundHand) == 0) {
+						char handstr[10];
+						h_toString(foundHand, handstr);
+						combo.hands = ll_delete(combo.hands);
+					}
+				}
+			}
+		}
+	}
+
+	return combo;
 }
 
 signed c_compare(combo_t a, combo_t b) {

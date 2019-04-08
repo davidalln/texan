@@ -233,11 +233,6 @@ MU_TEST(hand_decode_encoded) {
 		
 		h_decode(h_encode(proof), &transformed);
 		
-		char proofStr[10];
-		char transformedStr[10];
-		h_toString(proof, proofStr);
-		h_toString(transformed, transformedStr);
-
 		assert_hand_eq(proof, transformed);
 	}
 }

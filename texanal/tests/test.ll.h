@@ -235,6 +235,30 @@ MU_TEST(ll_search_and_delete) {
 	ll_deleteList(list);
 }
 
+MU_TEST(ll_search_delete_search) {
+	ll_t list = ll_newList();
+	list.decode = returnInt;
+	list.compare = compareInt;
+
+	int elems[5] = {10, 20, 30, 40, 50};
+	list = ll_add(list, elems[1]);
+	list = ll_add(list, elems[0]);
+	list = ll_add(list, elems[2]);
+	list = ll_add(list, elems[4]);
+	list = ll_add(list, elems[3]);
+
+	mu_assert_int_eq(5, list.length);
+
+	list = ll_delete(ll_search(list, 30));
+	mu_assert_int_eq(4, list.length);
+
+
+	ll_node_t * ptr = list.ptr;
+	list = ll_search(list, 30);
+	mu_check(ptr == list.ptr);
+}
+
+
 MU_TEST_SUITE(linked_list_suite) {
 	MU_RUN_TEST(ll_initialize);
 	MU_RUN_TEST(ll_insert_one);
@@ -247,4 +271,5 @@ MU_TEST_SUITE(linked_list_suite) {
 	MU_RUN_TEST(ll_delete_one);
 	MU_RUN_TEST(ll_delete_one_with_remainder);
 	MU_RUN_TEST(ll_search_and_delete);
+	MU_RUN_TEST(ll_search_delete_search);
 }

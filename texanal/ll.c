@@ -24,10 +24,13 @@ void ll_deleteList(ll_t ll) {
 			ll.ptr = next;
 		} while (ll.ptr != start);
 	}
+
+	ll.head = NULL;
+	ll.ptr = NULL;
 }
 
 unsigned ll_isNull(ll_t ll) {
-	return (ll.ptr == NULL);
+	return (ll.ptr == NULL && ll.head == NULL);
 }
 
 ll_t ll_search(ll_t ll, data payload) {
@@ -108,10 +111,11 @@ ll_t ll_delete(ll_t ll) {
 		ptr->prev->next = ptr->next;
 		ptr->next->prev = ptr->prev;
 
+		ll.ptr = ptr->prev;
+
 		if (ll.ptr == ll.head)
 			ll.head = ptr->next;
 
-		ll.ptr = ptr->next;
 		ll.length--;
 
 		free(ptr);

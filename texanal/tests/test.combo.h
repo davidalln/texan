@@ -559,6 +559,79 @@ MU_TEST(combo_offsuit_has_hands) {
 	}
 }
 
+MU_TEST(combo_delete_hand) {
+	combo_t combosCopy[169];
+	for (int i = 0; i < 169; i++) {
+		combo_t combo = combos[i];
+		combo_t * comboCopy = combosCopy + i;
+		*comboCopy = c_newNullCombo();
+
+		comboCopy->ranks[0] = combo.ranks[0];
+		comboCopy->ranks[1] = combo.ranks[1];
+		comboCopy->type = combo.type;
+		
+		unsigned max = 0;
+		if (combo.type == PAIR) {
+			max = 6;
+		} else {
+			max = (combo.type == SUITED) ? 4 : 12;
+		}
+
+		ll_t ptr = ll_head(combo.hands);
+		for (int x = 0; x < max; x++) {
+			hand_t comboHand;
+			ll_get(ptr, &comboHand);
+			comboCopy->hands = ll_add(comboCopy->hands, h_encode(comboHand));
+			ptr = ll_next(ptr);
+		}
+	}
+
+	card_t deadCards[7];
+	deadCards[0] = d_newCard(ACE, SPADE);
+	deadCards[1] = d_newCard(ACE, HEART);
+	deadCards[2] = d_newCard(ACE, DIAMOND);
+	deadCards[3] = d_newCard(ACE, CLUB);
+	deadCards[4] = d_newCard(SEVEN, SPADE);
+	deadCards[5] = d_newCard(SEVEN, CLUB);
+	deadCards[6] = d_newCard(TWO, HEART);
+
+	for (int i = 0; i < 13; i++) {
+		for (int j = 0; j < 13; j++) {
+			combo_t combo = combosCopy[i * 13 + j];
+
+			char combostr[10];
+			c_toString(combo, combostr);
+			combo = c_deleteCards(combo, deadCards, 7);
+
+			if (i == ACE || j == ACE) {
+				mu_assert_int_eq(0, combo.hands.length);
+			} else if (i == SEVEN && j == TWO || i == TWO && j == SEVEN) {
+				switch (combo.type) {
+					case SUITED: mu_assert_int_eq(1, combo.hands.length); break;
+					case OFFSUIT: mu_assert_int_eq(5, combo.hands.length); break;
+				}
+			} else if (i == SEVEN || j == SEVEN) {
+				switch (combo.type) {
+					case PAIR: mu_assert_int_eq(1, combo.hands.length); break;
+					case SUITED: mu_assert_int_eq(2, combo.hands.length); break;
+					case OFFSUIT: mu_assert_int_eq(6, combo.hands.length); break;
+				}
+			} else if (i == TWO || j == TWO) {
+				switch (combo.type) {
+					case PAIR: mu_assert_int_eq(3, combo.hands.length); break;
+					case SUITED: mu_assert_int_eq(3, combo.hands.length); break;
+					case OFFSUIT: mu_assert_int_eq(9, combo.hands.length); break;
+				}
+			}
+
+			combosCopy[i * 13 + j] = combo;
+		}
+	}
+
+	for (int i = 0; i < 169; i++) {
+		c_deleteCombo(combosCopy[i]);
+	}
+}
 
 MU_TEST_SUITE(combo_test_suite) {
 	MU_RUN_TEST(combo_null);
@@ -569,4 +642,5 @@ MU_TEST_SUITE(combo_test_suite) {
 	MU_RUN_TEST(combo_pair_has_hands);
 	MU_RUN_TEST(combo_suited_has_hands);
 	MU_RUN_TEST(combo_offsuit_has_hands);
+	MU_RUN_TEST(combo_delete_hand);
 }

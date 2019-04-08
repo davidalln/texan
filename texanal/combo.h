@@ -18,7 +18,8 @@ combo_t c_newNullCombo();
 combo_t c_newCombo(rank_t rank0, rank_t rank1);
 void c_deleteCombo();
 unsigned c_isNull(combo_t combo);
-unsigned c_hasCard(card_t card);
+
+combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards);
 
 signed c_compare(combo_t a, combo_t b);
 

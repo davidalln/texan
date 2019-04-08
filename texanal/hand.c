@@ -33,9 +33,9 @@ signed h_compare(hand_t a, hand_t b) {
 	return h_compareData(h_encode(a), h_encode(b));
 }
 
-signed h_compareData(data a, data b) {
-	if (a < b) return 1;
-	else if (a > b) return -1;
+signed h_compareData(data _a, data _b) {
+	if (_a < _b) return 1;
+	else if (_a > _b) return -1;
 	else return 0;
 }
 

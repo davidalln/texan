@@ -15,6 +15,6 @@ data h_encode(hand_t hand);
 void h_decode(data _data, void* _hand);
 
 signed h_compare(hand_t a, hand_t b);
-signed h_compareData(data a, data b);
+signed h_compareData(data _a, data _b);
 
 void h_toString(hand_t hand, char * str);
