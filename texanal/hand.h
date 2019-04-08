@@ -1,35 +1,20 @@
 #pragma once
 
-typedef unsigned char card_t;
-
-typedef enum {
-	ACE, KING, QUEEN, JACK, TEN, NINE, EIGHT, SEVEN, SIX, FIVE, FOUR, THREE, TWO, NO_RANK
-} rank_t;
-
-typedef enum {
-	SPADE, HEART, DIAMOND, CLUB, NO_SUIT
-} suit_t;
+#include "ll.h"
+#include "card.h"
 
 typedef struct {
-	card_t card0;
-	card_t card1;
+	card_t cards[2];
 } hand_t;
 
-card_t h_newBlankCard();
-card_t h_newCard(rank_t rank, suit_t suit);
-hand_t h_newHand(rank_t rank0, suit_t suit0, rank_t rank1, suit_t suit1);
+hand_t h_newNullHand();
+hand_t h_newHand(card_t card0, card_t card1);
+unsigned h_isNull();
 
-rank_t h_cardRank(card_t card);
-rank_t h_cardSuit(card_t card);
+data h_encode(hand_t hand);
+void h_decode(data _data, void* _hand);
 
-rank_t h_rank0(hand_t hand);
-rank_t h_rank1(hand_t hand);
+signed h_compare(hand_t a, hand_t b);
+signed h_compareData(data a, data b);
 
-suit_t h_suit0(hand_t hand);
-suit_t h_suit1(hand_t hand);
-
-unsigned h_hasCard(hand_t hand, card_t card);
-unsigned h_hasCardRank(hand_t hand, card_t card);
-
-void h_cardPrintString(card_t card);
-void h_printString(hand_t hand);
+void h_toString(hand_t hand, char * str);

@@ -1,6 +1,8 @@
 #include <stdio.h>
 
-#include <windows.h>
+#ifdef _WIN32 
+	#include <windows.h>
+#endif
 #include "range.h"
 #include "texture.h"
 #include "parseRange.h"
@@ -12,6 +14,7 @@
 
 
 int main(int argc, char *argv[]) {
+	#ifdef _WIN32 
 	// Set output mode to handle virtual terminal sequences
 	HANDLE hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	if (hOut == INVALID_HANDLE_VALUE)
@@ -30,6 +33,7 @@ int main(int argc, char *argv[]) {
 	{
 		return GetLastError();
 	}
+	#endif
 
 	printf(" ________                     ______                       __            ___    \n");
 	printf("|        \\                   /      \\                     |  \\          |   \\   \n");
