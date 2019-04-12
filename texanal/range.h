@@ -2,13 +2,12 @@
 
 #include "combo.h"
 
-typedef struct combo_list combo_list_t;
-struct combo_list {
-	combo_t combo;
-	combo_list_t *prev;
-	combo_list_t *next;
-};
-
 typedef struct {
-	combo_list_t * combos;
+	ll_t combos;
 } range_t;
+
+range_t r_newRange();
+unsigned r_isNull(range_t range);
+void r_deleteRange(range_t range);
+
+range_t r_addCombo(range_t range, combo_t combo);

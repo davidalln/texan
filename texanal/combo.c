@@ -75,6 +75,47 @@ unsigned c_isNull(combo_t combo) {
 	return (combo.type == NULL_COMBO && ll_isNull(combo.hands));
 }
 
+data c_encode(combo_t combo) {
+	data activeHands = 0;
+
+	if (!c_isNull(combo)) {
+		ll_t start = combo.hands;
+		do {
+			hand_t hand;
+			ll_get(combo.hands, &hand);
+
+			activeHands |= (1 << (hand.cards[0].suit * 4 + hand.cards[1].suit));
+
+			combo.hands = ll_next(combo.hands);	
+		} while (start.ptr != combo.hands.ptr);
+	}
+
+	return (combo.ranks[0] << 24) | (combo.ranks[1] << 20) | (combo.type << 16) | activeHands;
+}
+
+void c_decode(data _data, void* _combo) {
+	combo_t *combo = (combo_t *)(_combo);
+
+	combo->ranks[0] = _data >> 24 & 0b1111;
+	combo->ranks[1] = _data >> 20 & 0b1111;
+	combo->type = _data >> 16 & 0b1111;
+
+	unsigned activeHands = _data & 0b1111111111111111;
+	for (int i = 0; i < 16; i++) {
+		unsigned handActive = activeHands & (1 << 15 - i);
+		if (handActive) {
+			suit_t suit0 = i % 4;
+			suit_t suit1 = i / 4;	
+
+			card_t card0 = d_newCard(combo->ranks[0], suit0);
+			card_t card1 = d_newCard(combo->ranks[1], suit1);
+
+			hand_t hand = h_newHand(card0, card1);
+			combo->hands = ll_add(combo->hands, h_encode(hand));
+		}
+	}	
+}
+
 combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
 	for (int i = 0; i < nCards; i++) {
 		card_t card = cards[i];
@@ -108,13 +149,13 @@ combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
 }
 
 signed c_compare(combo_t a, combo_t b) {
-	if (a.ranks[0] < b.ranks[0]) {
-		return 1;
-	} else if (a.ranks[1] < b.ranks[1]) {
-		return -1;
-	} else {
-		return 0;
-	}
+	return c_compareData(c_encode(a), c_encode(b));
+}
+
+signed c_compareData(data _a, data _b) {
+	if (_a < _b) return 1;
+	else if (_a > _b) return -1;
+	else return 0;
 }
 
 void c_toString(combo_t combo, char * str) {

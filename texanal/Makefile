@@ -2,7 +2,7 @@ IDIR =.
 JSONDIR=../dependencies/json-c
 UNITDIR=../dependencies/minunit
 CC=gcc
-CFLAGS=-I$(IDIR) -I$(JSONDIR) -I$(UNITDIR) -fPIC
+CFLAGS=-I$(IDIR) -I$(JSONDIR) -I$(UNITDIR) -fPIC -g
 
 ODIR=obj
 LDIR =../lib

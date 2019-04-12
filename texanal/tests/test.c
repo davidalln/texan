@@ -6,6 +6,7 @@
 #include "test.card.h"
 #include "test.hand.h"
 #include "test.combo.h"
+#include "test.range.h"
 
 int main() {
 	initialize_cards();
@@ -23,6 +24,9 @@ int main() {
 
 	printf("\n\n== combo =====================\n");
 	MU_RUN_SUITE(combo_test_suite);
+
+	printf("\n\n== range =====================\n");
+	MU_RUN_SUITE(range_test_suite);
 
 	delete_combos();
 
