@@ -1,0 +1,302 @@
+{
+  "name": "EP open",
+  "range": [
+    {
+      "combo": "AA",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "AKs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "AKo",
+      "hands": [
+        [ false, true, true, true ],
+        [ true, false, true, true ],
+        [ true, true, false, true ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "AQs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "AQo",
+      "hands": [
+        [ false, true, true, true ],
+        [ true, false, true, true ],
+        [ true, true, false, true ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "AJs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "ATs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A9s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A8s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A7s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A6s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A5s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A4s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A3s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "A2s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "KK",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "KQs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "KJs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "QQ",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "QJs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "JJ",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "JTs",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "TT",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "T9s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "99",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "98s",
+      "hands": [
+        [ true, false, false, false ],
+        [ false, true, false, false ],
+        [ false, false, true, false ],
+        [ false, false, false, true ]
+      ]
+    },
+    {
+      "combo": "88",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "77",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "66",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "55",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "44",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "33",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    },
+    {
+      "combo": "22",
+      "hands": [
+        [ false, false, false, false ],
+        [ true, false, false, false ],
+        [ true, true, false, false ],
+        [ true, true, true, false ]
+      ]
+    }
+  ]
+}

@@ -1,6 +1,0 @@
-[submodule "dependencies/json-c"]
-	path = dependencies/json-c
-	url = https://github.com/jehiah/json-c
-[submodule "dependencies/minunit"]
-	path = dependencies/minunit
-	url = https://github.com/siu/minunit.git
