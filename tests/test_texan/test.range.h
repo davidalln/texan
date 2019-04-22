@@ -74,7 +74,7 @@ MU_TEST(range_has_combo) {
 	mu_assert_int_eq(5, range->combos.length);
 
 	for (int i = 0; i < 5; i++) {
-		mu_check(r_hasCombo(*range, combos[i]));
+		mu_check(r_hasCombo(range, combos[i]));
 	}
 
 	r_deleteRange(range);

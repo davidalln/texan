@@ -26,6 +26,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "test_parser", "tests\test_p
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "texan_cli", "src\texan_cli\texan_cli.vcxproj", "{36B5638F-4EA4-4656-8840-F72DAC627304}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC6C0731-92CB-4A7C-912E-BB5C3286A975} = {AC6C0731-92CB-4A7C-912E-BB5C3286A975}
+		{9F1AD6EC-3ACC-4949-A426-0365263E1CDA} = {9F1AD6EC-3ACC-4949-A426-0365263E1CDA}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -86,7 +86,7 @@
       <AdditionalDependencies>jsonc.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>jsonD.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>json-c.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Lib>
     <Lib>
       <AdditionalLibraryDirectories>$(SolutionDir)\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>

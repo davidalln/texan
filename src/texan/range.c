@@ -30,11 +30,11 @@ unsigned r_addCombo(range_t * range, combo_t combo) {
 	return range->combos.length;
 }
 
-unsigned r_hasCombo(range_t range, combo_t combo) {
-	range.combos = ll_search(range.combos, c_encode(combo));
+unsigned r_hasCombo(range_t * range, combo_t combo) {
+	range->combos = ll_search(range->combos, c_encode(combo));
 
 	combo_t searchCombo = c_newNullCombo();
-	ll_get(range.combos, &searchCombo);
+	ll_get(range->combos, &searchCombo);
 
 	signed cmp = (c_compareRankAndType(searchCombo, combo));
 	c_deleteCombo(searchCombo);

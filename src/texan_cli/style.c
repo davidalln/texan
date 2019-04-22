@@ -2,33 +2,38 @@
 
 #ifdef _WIN32
 	#include <wchar.h>
+
+	#define _L L
+	#define SET_COLOR(color) wprintf(L"%ls", color)
 #else
 	#include <stdio.h>
+	#define _L
+	#define SET_COLOR(color) printf("%s", color)
 #endif
 
-#define COLOR_BLANK		"\033[0m"
+#define COLOR_BLANK		_L"\033[0m"
 
-#define COLOR_FG_BLACK		"\x1b[30m"
-#define COLOR_FG_RED		"\x1b[31m"
-#define COLOR_FG_GREEN		"\x1b[32m"
-#define COLOR_FG_YELLOW		"\x1b[33m"
-#define COLOR_FG_BLUE		"\x1b[34m"
-#define COLOR_FG_MAGENTA	"\x1b[35m"
-#define COLOR_FG_CYAN		"\x1b[36m"
-#define COLOR_FG_WHITE		"\x1b[37m"
-#define COLOR_FG_EXTENDED	"\x1b[38m"
-#define COLOR_FG_DEFAULT	"\x1b[39m"
+#define COLOR_FG_BLACK		_L"\x1b[30m"
+#define COLOR_FG_RED		_L"\x1b[31m"
+#define COLOR_FG_GREEN		_L"\x1b[32m"
+#define COLOR_FG_YELLOW		_L"\x1b[33m"
+#define COLOR_FG_BLUE		_L"\x1b[34m"
+#define COLOR_FG_MAGENTA	_L"\x1b[35m"
+#define COLOR_FG_CYAN		_L"\x1b[36m"
+#define COLOR_FG_WHITE		_L"\x1b[37m"
+#define COLOR_FG_EXTENDED	_L"\x1b[38m"
+#define COLOR_FG_DEFAULT	_L"\x1b[39m"
 
-#define COLOR_BG_BLACK		"\x1b[100m"
-#define COLOR_BG_RED		"\x1b[101m"
-#define COLOR_BG_GREEN		"\x1b[102m"
-#define COLOR_BG_YELLOW		"\x1b[103m"
-#define COLOR_BG_BLUE		"\x1b[104m"
-#define COLOR_BG_MAGENTA	"\x1b[105m"
-#define COLOR_BG_CYAN		"\x1b[106m"
-#define COLOR_BG_WHITE		"\x1b[107m"
-#define COLOR_BG_EXTENDED	"\x1b[108m"
-#define COLOR_BG_DEFAULT	"\x1b[109m"
+#define COLOR_BG_BLACK		_L"\x1b[100m"
+#define COLOR_BG_RED		_L"\x1b[101m"
+#define COLOR_BG_GREEN		_L"\x1b[102m"
+#define COLOR_BG_YELLOW		_L"\x1b[103m"
+#define COLOR_BG_BLUE		_L"\x1b[104m"
+#define COLOR_BG_MAGENTA	_L"\x1b[105m"
+#define COLOR_BG_CYAN		_L"\x1b[106m"
+#define COLOR_BG_WHITE		_L"\x1b[107m"
+#define COLOR_BG_EXTENDED	_L"\x1b[108m"
+#define COLOR_BG_DEFAULT	_L"\x1b[109m"
 
 #ifdef _WIN32
 	#define SET_COLOR(color) wprintf(L"%ls", color)

@@ -14,7 +14,7 @@ range_t * rp_parseRangeFile(char * filename) {
 	}
 
 	range_t * range = r_newRange();
-	unsigned result = rp_parseRangeJSON(data, &range);
+	unsigned result = rp_parseRangeJSON(data, range);
 	if (!result) {
 		fprintf(stderr, "rp_parseRangeFile: error parsing range JSON\n");
 		r_deleteRange(range);
@@ -169,8 +169,8 @@ unsigned rp_parseRangeJSON(char * data, range_t * range)
 		else {
 			char type = string[2];
 			switch (type) {
-			case 's': combo_type = SUITED;
-			case 'o': combo_type = OFFSUIT;
+			case 's': combo_type = SUITED; break;
+			case 'o': combo_type = OFFSUIT; break;
 			}
 
 			if (combo_type == NULL_COMBO) {
