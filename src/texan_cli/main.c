@@ -46,12 +46,13 @@ int main(int argc, char * argv[]) {
 
 	int opt;
 
-	char fp_in[OPT_BUFFER_SIZE];
-	char fp_out[OPT_BUFFER_SIZE];
+	char range_fp_in[OPT_BUFFER_SIZE];
+	char range_fp_out[OPT_BUFFER_SIZE];
+	char range_string[OPT_BUFFER_SIZE];
 	status_t status = NONE;
 
-	fp_in[0] = '\0';
-	fp_out[0] = '\0';
+	range_fp_in[0] = '\0';
+	range_fp_out[0] = '\0';
 
 	while ((opt = getopt(argc, argv, "rf:s:o:")) != -1) {
 		switch (opt) {
@@ -61,28 +62,36 @@ int main(int argc, char * argv[]) {
 		case 'f':
 			switch (status) {
 			case RANGE:
-				_strcpy(fp_in, OPT_BUFFER_SIZE, optarg);
+				_strcpy(range_fp_in, OPT_BUFFER_SIZE, optarg);
 				printf("%s", optarg);
 				break;
 			default:
 				fprintf(stderr, "texan_cli: attempted to load file without a destination\n");
 				return 1;
-			}
-			break;
+			} break;
 		case 'o':
 			switch (status) {
 			case RANGE:
-				_strcpy(fp_out, OPT_BUFFER_SIZE, optarg);
+				_strcpy(range_fp_out, OPT_BUFFER_SIZE, optarg);
 				break;
 			default:
 				fprintf(stderr, "texan_cli: attempted to load file without a destination\n");
 				return 1;
-			}
-			break;
+			} break;
+		case 's':
+			switch (status) {
+			case RANGE:
+				_strcpy(range_string, OPT_BUFFER_SIZE, optarg);
+				break;
+			default:
+				fprintf(stderr, "texan_cli: attempted to load file without a destination\n");
+				return 1;
+			} break;
 		}
 	}
 
-	range_t * range = rp_parseRangeFile(fp_in);
+	range_t * range = r_newRange();
+	rp_parseRangeString(range_string, range);
 
 	for (int i = 0; i < 13; i++) {
 		printf("+---+---+---+---+---+---+---+---+---+---+---+---+---+\n");
@@ -109,17 +118,6 @@ int main(int argc, char * argv[]) {
 		printf("|\n");
 	}
 	printf("+---+---+---+---+---+---+---+---+---+---+---+---+---+\n");
-
-	range->combos = ll_head(range->combos);
-	do {
-		combo_t combo = c_newNullCombo();
-		ll_get(range->combos, &combo);
-
-		char cstr[10];
-		c_toString(combo, cstr);
-		printf("%s, ", cstr);
-		range->combos = ll_next(range->combos);
-	} while (!ll_atHead(range->combos));
-
-	return 1;
+	
+	return 0;
 }

@@ -222,10 +222,133 @@ unsigned rp_parseRangeJSON(char * data, range_t * range)
 			fprintf(stderr, "rp_parseRange: Failed to add combo %s to the range", string);
 			return 0;
 		}
+	}
 
-		char cstr[10];
-		c_toString(newCombo, cstr);
-		printf("added combo %s with %d hands to the range\n", cstr, newCombo.hands.length);
+	return range->combos.length;
+}
+
+unsigned rp_parseRangeString(char * string, range_t * range)
+{
+	rank_t highRanks[2] = { NULL_RANK, NULL_RANK };
+	rank_t lowRanks[2] = { NULL_RANK, NULL_RANK };
+	unsigned atEnd = 0;
+	char * c = string;
+	combo_type_t atType = NULL_COMBO;
+
+	while (!atEnd) {
+		if (*c == '\0')
+			atEnd = 1;
+
+		rank_t atRank = NULL_RANK;
+		switch (*c) {
+		case 'A': atRank = ACE; break;
+		case 'K': atRank = KING; break;
+		case 'Q': atRank = QUEEN; break;
+		case 'J': atRank = JACK; break;
+		case 'T': atRank = TEN; break;
+		case '9': atRank = NINE; break;
+		case '8': atRank = EIGHT; break;
+		case '7': atRank = SEVEN; break;
+		case '6': atRank = SIX; break;
+		case '5': atRank = FIVE; break;
+		case '4': atRank = FOUR; break;
+		case '3': atRank = THREE; break;
+		case '2': atRank = TWO; break;
+
+		case 's':
+			atType = SUITED; break;
+
+		case 'o':
+			atType = OFFSUIT; break;
+
+		case '+':
+			if (highRanks[0] == NULL_RANK || highRanks[1] == NULL_RANK) {
+				fprintf(stderr, "rp_parseRangeString: Invalid range string (tried to use %c without enough data)\n", *c);
+				return 0;
+			}
+			else {
+				switch (atType) {
+				case PAIR: lowRanks[0] = ACE; lowRanks[1] = ACE; break;
+				case SUITED: case OFFSUIT: lowRanks[0] = highRanks[0]; lowRanks[1] = highRanks[0] + 1; break;
+				default:
+					fprintf(stderr, "rp_parseRangeString: Invalid range string (not enough data for action %c)\n", *c);
+					return 0;
+				}
+			} break;
+
+		case '-':
+			if (highRanks[0] == NULL_RANK || highRanks[1] == NULL_RANK) {
+				fprintf(stderr, "rp_parseRangeString: Invalid range string (not enough data for action %c)\n", *c);
+				return 0;
+			}
+			else {
+				lowRanks[0] = highRanks[0];
+				lowRanks[1] = highRanks[1];
+				highRanks[0] = NULL_RANK;
+				highRanks[1] = NULL_RANK;
+			} break;
+
+		case ' ': case ',': case '\0':
+			if (highRanks[0] != NULL_RANK && highRanks[1] != NULL_RANK) {
+				if (lowRanks[0] == NULL_RANK || lowRanks[1] == NULL_RANK) {
+					lowRanks[0] = highRanks[0];
+					lowRanks[1] = highRanks[1];
+				}
+
+				for (int i = 0; i <= highRanks[1] - lowRanks[1]; i++) {
+					switch (atType) {
+					case PAIR:
+						r_addCombo(range, c_newCombo(lowRanks[0] + i, lowRanks[1] + i)); break;
+					case SUITED:
+						r_addCombo(range, c_newCombo(lowRanks[0], lowRanks[1] + i)); break;
+					case OFFSUIT:
+						r_addCombo(range, c_newCombo(lowRanks[1] + i, lowRanks[0])); break;
+					case NULL_COMBO:
+						fprintf(stderr, "rp_parseRangeString: Invalid range string (not enough data to add combo)\n");
+						return 0;
+					}
+				}
+
+				highRanks[0] = NULL_RANK;
+				highRanks[1] = NULL_RANK;
+				lowRanks[0] = NULL_RANK;
+				lowRanks[1] = NULL_RANK;
+				atType = NULL_COMBO;
+			}
+			else if (highRanks[0] != NULL_RANK || highRanks[1] != NULL_RANK) {
+				fprintf(stderr, "rp_parseRangeString: Invalid range string (not enough data to add combo)\n");
+				return 0;
+			} break;
+
+		default:
+			fprintf(stderr, "rp_parseRangeString: Invalid range string (cannot process character %c)", *c);
+			return 0;
+		}
+
+		if (atRank != NULL_RANK) {
+			if (highRanks[0] == NULL_RANK) highRanks[0] = atRank;
+			else if (highRanks[1] == NULL_RANK) {
+				highRanks[1] = atRank;
+				if (highRanks[0] == highRanks[1]) atType = PAIR;
+			}
+			else if (lowRanks[0] == NULL_RANK) lowRanks[0] = atRank;
+			else if (lowRanks[1] == NULL_RANK) {
+				lowRanks[1] = atRank;
+				if (highRanks[0] < lowRanks[0] || highRanks[1] < lowRanks[1]) {
+					rank_t tmp = highRanks[0];
+					highRanks[0] = lowRanks[0];
+					lowRanks[0] = tmp;
+
+					tmp = highRanks[1];
+					highRanks[1] = lowRanks[1];
+					lowRanks[1] = tmp;
+				}
+			}
+
+			atRank = NULL_RANK;
+		}
+
+		c++;
 	}
 
 	return range->combos.length;
