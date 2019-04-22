@@ -1,0 +1,6 @@
+[submodule "include/minunit"]
+	path = include/minunit
+	url = https://github.com/siu/minunit
+[submodule "include/json-c"]
+	path = include/json-c
+	url = https://github.com/json-c/json-c.git
