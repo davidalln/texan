@@ -119,6 +119,8 @@
   <ItemGroup>
     <ClCompile Include="card.c" />
     <ClCompile Include="combo.c" />
+    <ClCompile Include="deck.c" />
+    <ClCompile Include="equity.c" />
     <ClCompile Include="hand.c" />
     <ClCompile Include="ll.c" />
     <ClCompile Include="range.c" />
@@ -126,6 +128,8 @@
   <ItemGroup>
     <ClInclude Include="card.h" />
     <ClInclude Include="combo.h" />
+    <ClInclude Include="deck.h" />
+    <ClInclude Include="equity.h" />
     <ClInclude Include="hand.h" />
     <ClInclude Include="ll.h" />
     <ClInclude Include="range.h" />

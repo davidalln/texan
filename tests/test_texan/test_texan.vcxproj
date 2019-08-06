@@ -124,6 +124,7 @@
   <ItemGroup>
     <ClInclude Include="test.card.h" />
     <ClInclude Include="test.combo.h" />
+    <ClInclude Include="test.equity.h" />
     <ClInclude Include="test.hand.h" />
     <ClInclude Include="test.ll.h" />
     <ClInclude Include="test.range.h" />

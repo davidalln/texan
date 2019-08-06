@@ -79,6 +79,57 @@ combo_t c_newCombo(rank_t rank0, rank_t rank1) {
 	return combo;
 }
 
+combo_t c_newComboFromHand(hand_t hand)
+{
+	combo_t combo = c_newNullCombo();
+
+	combo.ranks[0] = (hand.cards[0].rank < hand.cards[1].rank) ? hand.cards[0].rank : hand.cards[1].rank;
+	combo.ranks[1] = (hand.cards[0].rank < hand.cards[1].rank) ? hand.cards[1].rank : hand.cards[0].rank;
+
+	if (combo.ranks[0] == combo.ranks[1]) {
+		combo.type = PAIR;
+	}
+	else if (hand.cards[0].suit == hand.cards[1].suit) {
+		combo.type = SUITED;
+	}
+	else {
+		combo.type = OFFSUIT;
+	}
+
+	combo.hands = ll_add(combo.hands, h_encode(hand));
+
+	return combo;
+}
+
+combo_t c_mergeCombo(combo_t a, combo_t b)
+{
+	if (c_compareRankAndType(a, b) != 0) {
+		fprintf(stderr, "c_mergeCombo: WARNING! attempted to merge combos with different rank/type");
+		return a;
+	}
+
+	combo_t merge = c_newBlankCombo(a.ranks[0], a.ranks[1], a.type);
+	a.hands = ll_head(a.hands);
+	do {
+		hand_t hand = h_newNullHand();
+		ll_get(a.hands, &hand);
+		c_addHand(&merge, hand);
+
+		a.hands = ll_next(a.hands);
+	} while (!ll_atHead(a.hands));
+
+	b.hands = ll_head(b.hands);
+	do {
+		hand_t hand = h_newNullHand();
+		ll_get(b.hands, &hand);
+		c_addHand(&merge, hand);
+
+		b.hands = ll_next(b.hands);
+	} while (!ll_atHead(b.hands));
+
+	return merge;
+}
+
 void c_deleteCombo(combo_t combo) {
 	ll_deleteList(combo.hands);
 }
@@ -108,16 +159,16 @@ data c_encode(combo_t combo) {
 void c_decode(data _data, void* _combo) {
 	combo_t *combo = (combo_t *)(_combo);
 
-	combo->ranks[0] = _data >> 24 & 0b1111;
-	combo->ranks[1] = _data >> 20 & 0b1111;
-	combo->type = _data >> 16 & 0b1111;
+	combo->ranks[0] = (_data >> 24) & 0b1111;
+	combo->ranks[1] = (_data >> 20) & 0b1111;
+	combo->type = (_data >> 16) & 0b1111;
 
 	unsigned activeHands = _data & 0b1111111111111111;
 	for (int i = 0; i < 16; i++) {
-		unsigned handActive = activeHands & (1 << 15 - i);
+		unsigned handActive = activeHands & (1 << i);
 		if (handActive) {
-			suit_t suit0 = i % 4;
-			suit_t suit1 = i / 4;	
+			suit_t suit0 = i / 4;
+			suit_t suit1 = i % 4;	
 
 			card_t card0 = d_newCard(combo->ranks[0], suit0);
 			card_t card1 = d_newCard(combo->ranks[1], suit1);
@@ -133,26 +184,43 @@ unsigned c_addHand(combo_t * combo, hand_t hand) {
 	return combo->hands.length;
 }
 
-combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
+combo_t c_deleteCards_hands(combo_t combo, card_t * cards, unsigned nCards, hand_t * removedHands, unsigned * nHands) {
+	unsigned nh = 0;
+
+	/*printf("\tdeleting %d cards... ", nCards);
+	for (int i = 0; i < nCards; i++) {
+		char qqstr[10];
+		d_toString(cards[i], qqstr);
+		printf("%s", qqstr);
+	}
+	printf("\n");*/
+
 	for (int i = 0; i < nCards; i++) {
 		card_t card = cards[i];
-		
+
 		if (combo.ranks[0] == card.rank || combo.ranks[1] == card.rank) {
 			for (int j = 0; j < 8; j++) {
 				if (!ll_isNull(combo.hands)) {
 					hand_t searchHand;
 					if (j < 4) {
 						searchHand = h_newHand(card, d_newCard(combo.ranks[1], j));
-					} else {
+					}
+					else {
 						searchHand = h_newHand(d_newCard(combo.ranks[0], j - 4), card);
 					}
 
 					combo.hands = ll_search(combo.hands, h_encode(searchHand));
-					
+
 					hand_t foundHand;
 					ll_get(combo.hands, &foundHand);
 
 					if (h_compare(searchHand, foundHand) == 0) {
+						char qstr[10];
+						h_toString(foundHand, qstr);
+						//printf("\t\tremoving hand %s\n", qstr);
+						if (removedHands != NULL) {
+							removedHands[nh++] = foundHand;
+						}
 						combo.hands = ll_delete(combo.hands);
 					}
 				}
@@ -160,7 +228,15 @@ combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
 		}
 	}
 
+	if (nHands != NULL) {
+		*nHands = nh;
+	}
+
 	return combo;
+}
+
+combo_t c_deleteCards(combo_t combo, card_t * cards, unsigned nCards) {
+	return c_deleteCards_hands(combo, cards, nCards, NULL, NULL);
 }
 
 signed c_compare(combo_t a, combo_t b) {

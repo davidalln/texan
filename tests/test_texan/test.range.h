@@ -16,6 +16,24 @@ MU_TEST(range_add_combo) {
 	r_deleteRange(range);
 }
 
+MU_TEST(range_add_combo_merge) {
+	range_t * range = r_newRange();
+	combo_t combo0 = c_newBlankCombo(ACE, ACE, PAIR);
+	combo_t combo1 = c_newBlankCombo(ACE, ACE, PAIR);
+	combo_t combo2 = c_newBlankCombo(ACE, ACE, PAIR);
+	c_addHand(&combo0, h_newHand(d_newCard(ACE, SPADE), d_newCard(ACE, CLUB)));
+	c_addHand(&combo1, h_newHand(d_newCard(ACE, SPADE), d_newCard(ACE, DIAMOND)));
+	c_addHand(&combo2, h_newHand(d_newCard(ACE, HEART), d_newCard(ACE, DIAMOND)));
+	c_addHand(&combo2, h_newHand(d_newCard(ACE, HEART), d_newCard(ACE, SPADE)));
+	r_addCombo(range, combo0);
+	r_addCombo(range, combo1);
+	r_addCombo(range, combo2);
+	mu_check(!r_isNull(*range));
+	mu_assert_int_eq(1, range->combos.length);
+	mu_assert_int_eq(4, range->nHands);
+	r_deleteRange(range);
+}
+
 MU_TEST(range_add_multiple) {
 	range_t * range = r_newRange();
 
@@ -106,7 +124,7 @@ MU_TEST(range_delete_cards) {
 
 	mu_assert_int_eq(5, range->combos.length);
 
-	*range = r_deleteCards(*range, cards, 5);
+	r_deleteCards(range, cards, 5);
 	mu_assert_int_eq(4, range->combos.length);
 	
 	combo_t newCombo;
@@ -146,6 +164,7 @@ MU_TEST(range_delete_cards) {
 MU_TEST_SUITE(range_test_suite) {
 	MU_RUN_TEST(range_initialize);
 	MU_RUN_TEST(range_add_combo);
+	MU_RUN_TEST(range_add_combo_merge);
 	MU_RUN_TEST(range_add_multiple);
 	MU_RUN_TEST(range_has_combo);
 	MU_RUN_TEST(range_delete_cards);

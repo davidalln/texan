@@ -5,6 +5,7 @@
 #include "parser.range.h"
 
 #include "json.h"
+#include "json_util.h"
 
 range_t * rp_parseRangeFile(char * filename) {
 	char * data = texan_load_file(filename);
@@ -22,6 +23,86 @@ range_t * rp_parseRangeFile(char * filename) {
 	}
 
 	return range;
+}
+
+json_object * rp_encodeRangeJSON(range_t *range);
+signed rp_saveRangeToFile(range_t * range, char * filename) {
+	size_t length;
+	char * string = json_object_to_json_string_length(rp_encodeRangeJSON(range), 0, &length);
+	const char * copy = _strdup(string);
+	texan_write_file(filename, string, length);
+
+	return 0;
+}
+
+json_object * rp_encodeRangeJSON(range_t *range)
+{
+	json_object *head_obj;
+	head_obj = json_object_new_object();
+
+	if (!r_isNull(*range)) {
+		json_object *name_str = json_object_new_string(range->name);
+		json_object_object_add(head_obj, "name", name_str);
+
+		json_object *range_arr;
+		range_arr = json_object_new_array();
+
+		range->combos = ll_head(range->combos);
+		do {
+			json_object *combo_obj;
+			combo_obj = json_object_new_object();
+
+			combo_t combo = c_newNullCombo();
+			ll_get(range->combos, &combo);
+
+			char combo_str[4];
+			c_toString(combo, combo_str);
+			json_object *combo_name_str = json_object_new_string(combo_str);
+			json_object_object_add(combo_obj, "combo", combo_name_str);
+
+			unsigned hand_arr[16] = {
+				0, 0, 0, 0,
+				0, 0, 0, 0,
+				0, 0, 0, 0,
+				0, 0, 0, 0
+			};
+
+			combo.hands = ll_head(combo.hands);
+			printf("%d:", combo.hands.length);
+			do {
+				hand_t hand = h_newNullHand();
+				ll_get(combo.hands, &hand);
+
+				suit_t x = hand.cards[0].suit;
+				suit_t y = hand.cards[1].suit;
+
+				printf("%d is 1:", x * 4 + y);
+				hand_arr[x * 4 + y] = 1;
+
+				combo.hands = ll_next(combo.hands);
+			} while (!ll_atHead(combo.hands));
+			printf("\n");
+
+			json_object *combo_hand_arr = json_object_new_array();
+			for (int i = 0; i < 4; i++) {
+				json_object *combo_hand_arr_row = json_object_new_array();
+				for (int j = 0; j < 4; j++) {
+					json_object_array_add(combo_hand_arr_row, json_object_new_boolean(hand_arr[i * 4 + j]));
+				}
+				json_object_array_add(combo_hand_arr, combo_hand_arr_row);
+			}
+
+			printf("%s\n", json_object_to_json_string(combo_hand_arr));
+
+			json_object_object_add(combo_obj, "hands", combo_hand_arr);
+			json_object_array_add(range_arr, combo_obj);
+			range->combos = ll_next(range->combos);
+		} while (!ll_atHead(range->combos));
+
+		json_object_object_add(head_obj, "range", range_arr);
+	}
+
+	return head_obj;
 }
 
 unsigned rp_parseRangeJSON(char * data, range_t * range)

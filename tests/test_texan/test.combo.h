@@ -634,6 +634,24 @@ MU_TEST(combo_delete_hand) {
 					case OFFSUIT: mu_assert_int_eq(9, combo.hands.length); break;
 				}
 			}
+			
+			data d = c_encode(combo);
+			combo_t test = c_newNullCombo();
+			c_decode(d, &test);
+
+			if (!ll_isNull(combo.hands)) {
+				test.hands = ll_head(test.hands);
+				do {
+					hand_t hand = h_newNullHand();
+					ll_get(test.hands, &hand);
+
+					for (int x = 0; x < 7; x++) {
+						mu_check(!h_containsCard(hand, deadCards[x]));
+					}
+
+					test.hands = ll_next(test.hands);
+				} while (!ll_atHead(test.hands));
+			}
 
 			combosCopy[i * 13 + j] = combo;
 		}

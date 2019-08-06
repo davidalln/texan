@@ -236,6 +236,152 @@ MU_TEST(hand_decode_encoded) {
 	}
 }
 
+MU_TEST(hand_calc_strength) {
+	hand_t hand0 = h_newHand(d_newCard(ACE, SPADE), d_newCard(ACE, HEART));
+	hand_t hand1 = h_newHand(d_newCard(ACE, SPADE), d_newCard(TWO, DIAMOND));
+	hand_t hand2 = h_newHand(d_newCard(TWO, SPADE), d_newCard(TWO, DIAMOND));
+	hand_t hand3 = h_newHand(d_newCard(THREE, HEART), d_newCard(THREE, SPADE));
+	hand_t hand4 = h_newHand(d_newCard(ACE, CLUB), d_newCard(KING, DIAMOND));
+	hand_t hand5 = h_newHand(d_newCard(ACE, SPADE), d_newCard(KING, SPADE));
+	hand_t hand6 = h_newHand(d_newCard(NINE, CLUB), d_newCard(EIGHT, SPADE));
+
+	card_t community0[3] = { d_newCard(TWO, CLUB), d_newCard(THREE, DIAMOND), d_newCard(FOUR, CLUB) };
+	card_t community1[3] = { d_newCard(TWO, CLUB), d_newCard(THREE, DIAMOND), d_newCard(THREE, CLUB) };
+	card_t community2[3] = { d_newCard(QUEEN, SPADE), d_newCard(JACK, SPADE), d_newCard(TEN, SPADE) };
+	card_t community3[5] = { d_newCard(QUEEN, SPADE), d_newCard(JACK, SPADE), d_newCard(TEN, SPADE), d_newCard(NINE, SPADE), d_newCard(TWO, CLUB) };
+
+	hand0 = h_calcStrength(hand0, community0, 3);
+	hand1 = h_calcStrength(hand1, community0, 3);
+	hand2 = h_calcStrength(hand2, community0, 3);
+	hand3 = h_calcStrength(hand3, community0, 3);
+	hand4 = h_calcStrength(hand4, community0, 3);
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand0));
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand1));
+	mu_assert_int_eq(THREE_OF_A_KIND, h_strength(hand2));
+	mu_assert_int_eq(THREE_OF_A_KIND, h_strength(hand3));
+	mu_assert_int_eq(HIGH_CARD, h_strength(hand4));
+
+	mu_check(hand0.strength < hand1.strength);
+	mu_check(hand0.strength > hand2.strength);
+	mu_check(hand0.strength > hand3.strength);
+	mu_check(hand0.strength < hand4.strength);
+	mu_check(hand1.strength > hand2.strength);
+	mu_check(hand1.strength > hand3.strength);
+	mu_check(hand1.strength < hand4.strength);
+	mu_check(hand2.strength > hand3.strength);
+	mu_check(hand2.strength < hand4.strength);
+	mu_check(hand3.strength < hand4.strength);
+
+	hand0 = h_calcStrength(hand0, community1, 3);
+	hand1 = h_calcStrength(hand1, community1, 3);
+	hand2 = h_calcStrength(hand2, community1, 3);
+	hand3 = h_calcStrength(hand3, community1, 3);
+	hand4 = h_calcStrength(hand4, community1, 3);
+	mu_assert_int_eq(TWO_PAIR, h_strength(hand0));
+	mu_assert_int_eq(TWO_PAIR, h_strength(hand1));
+	mu_assert_int_eq(FULL_HOUSE, h_strength(hand2));
+	mu_assert_int_eq(FOUR_OF_A_KIND, h_strength(hand3));
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand4));
+
+	mu_check(hand0.strength < hand1.strength);
+	mu_check(hand0.strength > hand2.strength);
+	mu_check(hand0.strength > hand3.strength);
+	mu_check(hand0.strength < hand4.strength);
+	mu_check(hand1.strength > hand2.strength);
+	mu_check(hand1.strength > hand3.strength);
+	mu_check(hand1.strength < hand4.strength);
+	mu_check(hand2.strength > hand3.strength);
+	mu_check(hand2.strength < hand4.strength);
+	mu_check(hand3.strength < hand4.strength);
+
+	hand0 = h_calcStrength(hand0, community2, 3);
+	hand1 = h_calcStrength(hand1, community2, 3);
+	hand2 = h_calcStrength(hand2, community2, 3);
+	hand3 = h_calcStrength(hand3, community2, 3);
+	hand4 = h_calcStrength(hand4, community2, 3);
+	hand5 = h_calcStrength(hand5, community2, 3);
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand0));
+	mu_assert_int_eq(HIGH_CARD, h_strength(hand1));
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand2));
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand3));
+	mu_assert_int_eq(STRAIGHT, h_strength(hand4));
+	mu_assert_int_eq(STRAIGHT_FLUSH, h_strength(hand5));
+
+	mu_check(hand0.strength < hand1.strength);
+	mu_check(hand0.strength < hand2.strength);
+	mu_check(hand0.strength < hand3.strength);
+	mu_check(hand0.strength > hand4.strength);
+	mu_check(hand0.strength > hand5.strength);
+	mu_check(hand1.strength > hand2.strength);
+	mu_check(hand1.strength > hand3.strength);
+	mu_check(hand1.strength > hand4.strength);
+	mu_check(hand1.strength > hand5.strength);
+	mu_check(hand2.strength > hand3.strength);
+	mu_check(hand2.strength > hand4.strength);
+	mu_check(hand2.strength > hand5.strength);
+	mu_check(hand3.strength > hand4.strength);
+	mu_check(hand3.strength > hand5.strength);
+	mu_check(hand4.strength > hand5.strength);
+
+	hand0 = h_calcStrength(hand0, community3, 5);
+	hand1 = h_calcStrength(hand1, community3, 5);
+	hand2 = h_calcStrength(hand2, community3, 5);
+	hand3 = h_calcStrength(hand3, community3, 5);
+	hand4 = h_calcStrength(hand4, community3, 5);
+	hand5 = h_calcStrength(hand5, community3, 5);
+	hand6 = h_calcStrength(hand6, community3, 5);
+	mu_assert_int_eq(FLUSH, h_strength(hand0));
+	mu_assert_int_eq(FLUSH, h_strength(hand1));
+	mu_assert_int_eq(FLUSH, h_strength(hand2));
+	mu_assert_int_eq(FLUSH, h_strength(hand3));
+	mu_assert_int_eq(STRAIGHT, h_strength(hand4));
+	mu_assert_int_eq(STRAIGHT_FLUSH, h_strength(hand5));
+	mu_assert_int_eq(STRAIGHT_FLUSH, h_strength(hand6));
+
+	mu_check(hand0.strength == hand1.strength);
+	mu_check(hand0.strength < hand2.strength);
+	mu_check(hand0.strength < hand3.strength);
+	mu_check(hand0.strength < hand4.strength);
+	mu_check(hand0.strength > hand5.strength);
+	mu_check(hand0.strength > hand6.strength);
+	mu_check(hand1.strength < hand2.strength);
+	mu_check(hand1.strength < hand3.strength);
+	mu_check(hand1.strength < hand4.strength);
+	mu_check(hand1.strength > hand5.strength);
+	mu_check(hand1.strength > hand6.strength);
+	mu_check(hand2.strength > hand3.strength);
+	mu_check(hand2.strength < hand4.strength);
+	mu_check(hand2.strength > hand5.strength);
+	mu_check(hand2.strength > hand6.strength);
+	mu_check(hand3.strength < hand4.strength);
+	mu_check(hand3.strength > hand5.strength);
+	mu_check(hand3.strength > hand6.strength);
+	mu_check(hand4.strength > hand5.strength);
+	mu_check(hand4.strength > hand6.strength);
+	mu_check(hand5.strength < hand6.strength);
+}
+
+MU_TEST(hand_calc_strength_edge0) {
+	hand_t hand0 = h_newHand(d_newCard(ACE, SPADE), d_newCard(ACE, HEART));
+	hand_t hand1 = h_newHand(d_newCard(ACE, DIAMOND), d_newCard(FIVE, DIAMOND));
+	hand_t hand2 = h_newHand(d_newCard(ACE, CLUB), d_newCard(FIVE, CLUB));
+	
+	card_t community[5];
+	community[0] = d_newCard(KING, HEART);
+	community[1] = d_newCard(SEVEN, SPADE);
+	community[2] = d_newCard(TWO, CLUB);
+	community[3] = d_newCard(THREE, HEART);
+	community[4] = d_newCard(FOUR, CLUB);
+
+	hand0 = h_calcStrength(hand0, community, 5);
+	hand1 = h_calcStrength(hand1, community, 5);
+	hand2 = h_calcStrength(hand2, community, 5);
+
+	mu_assert_int_eq(ONE_PAIR, h_strength(hand0));
+	mu_assert_int_eq(STRAIGHT, h_strength(hand1));
+	mu_assert_int_eq(STRAIGHT, h_strength(hand2));
+}
+
 MU_TEST_SUITE(hand_test_suite) {
 	MU_RUN_TEST(hand_test_null);
 	MU_RUN_TEST(hand_test_not_null);
@@ -246,5 +392,7 @@ MU_TEST_SUITE(hand_test_suite) {
 	MU_RUN_TEST(hand_encode);
 	MU_RUN_TEST(hand_decode);
 	MU_RUN_TEST(hand_decode_encoded);
+	MU_RUN_TEST(hand_calc_strength);
+	MU_RUN_TEST(hand_calc_strength_edge0);
 }
 

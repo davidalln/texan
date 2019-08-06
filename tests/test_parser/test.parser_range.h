@@ -122,7 +122,14 @@ MU_TEST(rp_parse_range_string_test) {
 	r_deleteRange(range);
 }
 
+MU_TEST(rp_encode_range_test) {
+	range_t * range = r_newRange();
+	unsigned result = rp_parseRangeString("22+, A2s+, A2o+, K4s+, KTo+, Q7s+, QTo+, J7s+, J9o+, T6s+, 98o, 96s+, 87o, 86s+, 75s+, 64s+, 54s+, 43s", range);
+	printf("asdf");
+}
+
 MU_TEST_SUITE(rp_suite) {
 	MU_RUN_TEST(rp_parse_data_test);
 	MU_RUN_TEST(rp_parse_range_string_test);
+	MU_RUN_TEST(rp_encode_range_test);
 }

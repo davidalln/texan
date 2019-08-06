@@ -81,7 +81,11 @@ ll_t ll_add(ll_t ll, data payload) {
 	} else {
 		//printf("adding payload %d by searching...\n", payload);
 		ll = ll_search(ll, payload);
-		
+
+		if ((*ll.compare)(payload, ll.head->payload) == 0) {
+			printf("adding duplicate into list\n");
+		}
+
 		ll_node_t * new = (ll_node_t *)(malloc(sizeof(ll_node_t)));
 
 		new->payload = payload;

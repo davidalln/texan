@@ -7,6 +7,7 @@
 #include "test.hand.h"
 #include "test.combo.h"
 #include "test.range.h"
+#include "test.equity.h"
 
 int main() {
 	initialize_cards();
@@ -27,6 +28,9 @@ int main() {
 
 	printf("\n\n== range =====================\n");
 	MU_RUN_SUITE(range_test_suite);
+
+	printf("\n\n== equity ====================\n");
+	MU_RUN_SUITE(equity_test_suite);
 
 	delete_combos();
 

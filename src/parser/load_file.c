@@ -8,6 +8,45 @@
 
 #include "load_file.h"
 
+void texan_write_file(const char * filename, const char * data, size_t length) {
+	printf("writing file %s\n", filename);
+
+#ifdef _WIN32
+	HANDLE hFile;
+	DWORD dwBytesToWrite = (DWORD)length;
+	DWORD dwBytesWritten = 0;
+	BOOL bErrorFlag = FALSE;
+
+	hFile = CreateFile(filename, GENERIC_WRITE, 0, NULL, CREATE_NEW, FILE_ATTRIBUTE_NORMAL, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		_tprintf(TEXT("Terminal failure: Unable to open file \"%s\" for write.\n"), filename);
+		return;
+	}
+
+	_tprintf(TEXT("Writing %d bytes to %s.\n"), dwBytesToWrite, filename);
+
+	bErrorFlag = WriteFile(hFile, data, dwBytesToWrite, &dwBytesWritten, NULL);
+	if (FALSE == bErrorFlag)
+	{
+		printf("Terminal failure: Unable to write to file.\n");
+	}
+	else
+	{
+		if (dwBytesWritten != dwBytesToWrite)
+		{
+			printf("Error: dwBytesWritten != dwBytesToWrite\n");
+		}
+		else
+		{
+			_tprintf(TEXT("Wrote %d bytes to %s successfully.\n"), dwBytesWritten, filename);
+		}
+	}
+
+	CloseHandle(hFile);
+#endif
+}
+
 char * texan_load_file(const char * filename) {
 	printf("loading file %s\n", filename);
 
